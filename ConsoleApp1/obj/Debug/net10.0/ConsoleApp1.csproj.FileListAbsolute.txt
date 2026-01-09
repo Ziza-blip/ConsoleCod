@@ -1,0 +1,14 @@
+C:\Users\IVAN_AWP\Documents\Нова папка (3)\Нова папка (2)\Нова папка (3)\modules\підпис\ConsoleApp1\bin\Debug\net10.0\ConsoleApp1.exe
+C:\Users\IVAN_AWP\Documents\Нова папка (3)\Нова папка (2)\Нова папка (3)\modules\підпис\ConsoleApp1\bin\Debug\net10.0\ConsoleApp1.deps.json
+C:\Users\IVAN_AWP\Documents\Нова папка (3)\Нова папка (2)\Нова папка (3)\modules\підпис\ConsoleApp1\bin\Debug\net10.0\ConsoleApp1.runtimeconfig.json
+C:\Users\IVAN_AWP\Documents\Нова папка (3)\Нова папка (2)\Нова папка (3)\modules\підпис\ConsoleApp1\bin\Debug\net10.0\ConsoleApp1.dll
+C:\Users\IVAN_AWP\Documents\Нова папка (3)\Нова папка (2)\Нова папка (3)\modules\підпис\ConsoleApp1\bin\Debug\net10.0\ConsoleApp1.pdb
+C:\Users\IVAN_AWP\Documents\Нова папка (3)\Нова папка (2)\Нова папка (3)\modules\підпис\ConsoleApp1\obj\Debug\net10.0\ConsoleApp1.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\IVAN_AWP\Documents\Нова папка (3)\Нова папка (2)\Нова папка (3)\modules\підпис\ConsoleApp1\obj\Debug\net10.0\ConsoleApp1.AssemblyInfoInputs.cache
+C:\Users\IVAN_AWP\Documents\Нова папка (3)\Нова папка (2)\Нова папка (3)\modules\підпис\ConsoleApp1\obj\Debug\net10.0\ConsoleApp1.AssemblyInfo.cs
+C:\Users\IVAN_AWP\Documents\Нова папка (3)\Нова папка (2)\Нова папка (3)\modules\підпис\ConsoleApp1\obj\Debug\net10.0\ConsoleApp1.csproj.CoreCompileInputs.cache
+C:\Users\IVAN_AWP\Documents\Нова папка (3)\Нова папка (2)\Нова папка (3)\modules\підпис\ConsoleApp1\obj\Debug\net10.0\ConsoleApp1.dll
+C:\Users\IVAN_AWP\Documents\Нова папка (3)\Нова папка (2)\Нова папка (3)\modules\підпис\ConsoleApp1\obj\Debug\net10.0\refint\ConsoleApp1.dll
+C:\Users\IVAN_AWP\Documents\Нова папка (3)\Нова папка (2)\Нова папка (3)\modules\підпис\ConsoleApp1\obj\Debug\net10.0\ConsoleApp1.pdb
+C:\Users\IVAN_AWP\Documents\Нова папка (3)\Нова папка (2)\Нова папка (3)\modules\підпис\ConsoleApp1\obj\Debug\net10.0\ConsoleApp1.genruntimeconfig.cache
+C:\Users\IVAN_AWP\Documents\Нова папка (3)\Нова папка (2)\Нова папка (3)\modules\підпис\ConsoleApp1\obj\Debug\net10.0\ref\ConsoleApp1.dll
