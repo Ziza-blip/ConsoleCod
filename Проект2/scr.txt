@@ -1,0 +1,291 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
+
+class Program
+{
+    static string productFile = "products.csv";
+    static string usersFile = "users.csv";
+    static string salesFile = "sales.csv";
+
+    struct Product
+    {
+        public int Id;
+        public string Title;
+        public double Price;
+        public int Quantity;
+    }
+
+    static void Main()
+    {
+        Console.OutputEncoding = Encoding.UTF8;
+        InitFiles();
+
+        if (!Login())
+            return;
+
+        ShowIntro();
+
+        while (true)
+            MainMenu();
+    }
+
+    static void InitFiles()
+    {
+        if (!File.Exists(productFile))
+        {
+            File.WriteAllText(productFile, "Id,Title,Price,Quantity\n" +
+                "1,Метро 2033,350,10\n" +
+                "2,Відьмак,420,8\n" +
+                "3,451 градусів за Фаренгейтом,300,12\n");
+        }
+
+        if (!File.Exists(usersFile))
+        {
+            File.WriteAllText(usersFile, "Id,Login,Password\n" +
+                "1,admin,12345\n");
+        }
+
+        if (!File.Exists(salesFile))
+        {
+            File.WriteAllText(salesFile, "Date,Product,Quantity,Price,Total\n");
+        }
+    }
+
+    static bool Login()
+    {
+        int attempts = 3;
+
+        while (attempts-- > 0)
+        {
+            Console.Clear();
+            Console.WriteLine($"Спроб залишилось: {attempts + 1}");
+            Console.Write("Логін: ");
+            string login = Console.ReadLine();
+            Console.Write("Пароль: ");
+            string pass = Console.ReadLine();
+
+            foreach (var line in File.ReadAllLines(usersFile).Skip(1))
+            {
+                var p = line.Split(',');
+                if (p.Length != 3) continue;
+
+                if (p[1] == login && p[2] == pass)
+                {
+                    Console.WriteLine("Вхід успішний!");
+                    Console.ReadKey();
+                    return true;
+                }
+            }
+
+            Console.WriteLine("Невірні дані!");
+            Console.ReadKey();
+        }
+
+        return false;
+    }
+
+    static void MainMenu()
+    {
+        Console.Clear();
+        Console.WriteLine("Лабораторна №5 — Книжковий магазин");
+        Console.WriteLine("1. Книги");
+        Console.WriteLine("2. Продаж");
+        Console.WriteLine("3. Пошук книги");
+        Console.WriteLine("4. Статистика складу");
+        Console.WriteLine("5. Історія продажів");
+        Console.WriteLine("6. Вихід");
+
+        int ch = (int)GetNumber("Виберіть пункт: ");
+
+        switch (ch)
+        {
+            case 1: ProductMenu(); break;
+            case 2: SellProducts(); break;
+            case 3: SearchProduct(); break;
+            case 4: ShowStatistics(); break;
+            case 5: ShowSales(); break;
+            case 6: Environment.Exit(0); break;
+        }
+    }
+
+    static void ProductMenu()
+    {
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("Меню книг:");
+            Console.WriteLine("1. Додати книгу");
+            Console.WriteLine("2. Переглянути книги");
+            Console.WriteLine("3. Видалити книгу");
+            Console.WriteLine("4. Назад");
+
+            int ch = (int)GetNumber("Виберіть: ");
+
+            if (ch == 1) AddProduct();
+            else if (ch == 2) ShowProducts();
+            else if (ch == 3) DeleteProduct();
+            else if (ch == 4) return;
+        }
+    }
+
+    static void AddProduct()
+    {
+        Console.Clear();
+        Console.Write("Назва книги: ");
+        string title = Console.ReadLine();
+        double price = GetNumber("Ціна: ");
+        int qty = (int)GetNumber("Кількість: ");
+
+        int id = GenerateId(productFile);
+        File.AppendAllText(productFile, $"{id},{title},{price},{qty}\n");
+
+        Console.WriteLine("Книгу додано!");
+        Console.ReadKey();
+    }
+    static void ShowProducts()
+    {
+        Console.Clear();
+        Console.WriteLine("ID | Назва | Ціна | Кількість");
+        foreach (var line in File.ReadAllLines(productFile).Skip(1))
+        {
+            var p = line.Split(',');
+            if (p.Length != 4) continue;
+            Console.WriteLine($"{p[0]} | {p[1]} | {p[2]} грн | {p[3]} шт");
+        }
+        Console.ReadKey();
+    }
+
+    static void DeleteProduct()
+    {
+        ShowProducts();
+        int id = (int)GetNumber("ID для видалення: ");
+
+        var lines = File.ReadAllLines(productFile)
+                        .Where(l => !l.StartsWith(id + ","))
+                        .ToArray();
+
+        File.WriteAllLines(productFile, lines);
+        Console.WriteLine("Книгу видалено!");
+        Console.ReadKey();
+    }
+
+    static void SellProducts()
+    {
+        var lines = File.ReadAllLines(productFile).ToList();
+        double totalOrder = 0;
+
+        for (int i = 1; i < lines.Count; i++)
+        {
+            var p = lines[i].Split(',');
+            if (p.Length != 4) continue;
+
+            int stock = int.Parse(p[3]);
+            int qty = (int)GetNumber($"Скільки '{p[1]}' (0–{stock}): ");
+
+            if (qty > 0 && qty <= stock)
+            {
+                totalOrder += qty * double.Parse(p[2]);
+                p[3] = (stock - qty).ToString();
+                lines[i] = string.Join(",", p);
+
+                string record = $"{DateTime.Now},{p[1]},{qty},{p[2]},{qty * double.Parse(p[2])}\n";
+                File.AppendAllText(salesFile, record);
+            }
+        }
+
+        File.WriteAllLines(productFile, lines);
+        Console.WriteLine($"Сума покупки: {totalOrder} грн");
+        Console.ReadKey();
+    }
+
+    static void SearchProduct()
+    {
+        Console.Clear();
+        Console.Write("Введіть назву книги: ");
+        string q = Console.ReadLine().ToLower();
+
+        bool found = false;
+        foreach (var l in File.ReadAllLines(productFile).Skip(1))
+        {
+            if (l.ToLower().Contains(q))
+            {
+                Console.WriteLine(l);
+                found = true;
+            }
+        }
+
+        if (!found) Console.WriteLine("Книгу не знайдено");
+        Console.ReadKey();
+    }
+
+    static void ShowStatistics()
+    {
+        double total = 0;
+        int count = 0;
+        double min = double.MaxValue;
+        double max = double.MinValue;
+
+        foreach (var l in File.ReadAllLines(productFile).Skip(1))
+        {
+            var p = l.Split(',');
+            if (p.Length != 4) continue;
+
+            if (double.TryParse(p[2], out double price) &&
+                int.TryParse(p[3], out int qty))
+            {
+                total += price * qty;
+                count++;
+                if (price < min) min = price;
+                if (price > max) max = price;
+            }
+        }
+
+        double avg = count > 0 ? total / count : 0;
+
+        Console.WriteLine($"Загальна вартість складу: {total} грн");
+        Console.WriteLine($"Кількість видів книг: {count}");
+        Console.WriteLine($"Мінімальна ціна: {min} грн");
+        Console.WriteLine($"Максимальна ціна: {max} грн");
+        Console.WriteLine($"Середня ціна: {avg:F2} грн");
+        Console.ReadKey();
+    }
+
+    static void ShowSales()
+    {
+        Console.Clear();
+        Console.WriteLine("Історія продажів:");
+        foreach (var line in File.ReadAllLines(salesFile).Skip(1))
+        {
+            Console.WriteLine(line);
+        }
+        Console.ReadKey();
+    }
+
+    static int GenerateId(string path)
+    {
+        int max = 0;
+        foreach (var l in File.ReadAllLines(path).Skip(1))
+        {
+            var p = l.Split(',');
+            if (int.TryParse(p[0], out int id) && id > max)
+                max = id;
+        }
+        return max + 1;
+    }
+
+    static double GetNumber(string msg)
+    {
+        Console.Write(msg);
+        if (!double.TryParse(Console.ReadLine(), out double n) || n < 0)
+            return GetNumber(msg);
+        return n;
+    }
+    static void ShowIntro()
+    {
+        Console.Clear();
+        Console.WriteLine("Ласкаво просимо до книжкового магазину!");
+        Console.ReadKey();
+    }
+}
